@@ -3,13 +3,14 @@ package bootstrap.liftweb
 import net.liftweb._
 import util._
 import Helpers._
-
 import common._
 import http._
 import sitemap._
 import Loc._
+import com.mongodb.{Mongo, MongoClient, ServerAddress}
 import net.liftmodules.JQueryModule
 import net.liftweb.http.js.jquery._
+import net.liftweb.mongodb.MongoDB
 
 /**
  * A class that's instantiated early and run.  It allows the application
@@ -19,6 +20,9 @@ class Boot {
   def boot {
     // where to search snippet
     LiftRules.addToPackages("code")
+
+    val server = new ServerAddress("127.0.0.1",27017)
+    MongoDB.defineDb(DefaultConnectionIdentifier,new MongoClient(server),"mydb")
 
     // Build SiteMap
     val entries = List(
