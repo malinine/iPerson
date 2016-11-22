@@ -7,7 +7,9 @@ import common._
 import http._
 import sitemap._
 import Loc._
-import com.mongodb.{Mongo, MongoClient, ServerAddress}
+import code.api.MyRest
+import code.service.MongoConfig
+import com.mongodb.{DB, Mongo, MongoClient, ServerAddress}
 import net.liftmodules.JQueryModule
 import net.liftweb.http.js.jquery._
 import net.liftweb.mongodb.MongoDB
@@ -21,8 +23,9 @@ class Boot {
     // where to search snippet
     LiftRules.addToPackages("code")
 
-    val server = new ServerAddress("127.0.0.1",27017)
-    MongoDB.defineDb(DefaultConnectionIdentifier,new MongoClient(server),"mydb")
+    MongoConfig.init
+
+    LiftRules.statelessDispatch.append(MyRest)
 
     // Build SiteMap
     val entries = List(
